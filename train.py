@@ -60,7 +60,7 @@ def main(data_root):
         
         os.makedirs("checkpoints", exist_ok=True)
         torch.save(model.state_dict(), f"checkpoints/piano_model_ep{epoch}.pt")
-        print(f"Epoch {epoch} 完成，平均 Loss: {epoch_loss/len(loader):.4f}")
+        print(f"Epoch {epoch} Finished. Loss: {epoch_loss/len(loader):.4f}")
 
 if __name__ == "__main__":
     PATH = "/data" 
