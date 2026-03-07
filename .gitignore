@@ -8,7 +8,6 @@ wheels/
 *.pth
 *.ckpt
 *.wav
-*.midi
 
 ref/
 # Virtual environments
