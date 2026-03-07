@@ -1,9 +1,13 @@
 from constant import *
 
-def load_midi(midi_path, total_frames, sr=16000, hop_length=512):
-
+def load_midi(midi_path, total_frames, offset_time=0, sr=16000, hop_length=512):
     midi_data = pretty_midi.PrettyMIDI(midi_path)
-    
+
+    for instrument in midi_data.instruments:
+        for note in instrument.notes:
+            note.start -= offset_time
+            note.end -= offset_time
+
     shape = (total_frames, 88)
     onset_label = np.zeros(shape, dtype=np.float32)
     offset_label = np.zeros(shape, dtype=np.float32)
@@ -20,21 +24,22 @@ def load_midi(midi_path, total_frames, sr=16000, hop_length=512):
             pitch = note.pitch - 21
             if not (0 <= pitch < 88):
                 continue
-
             start_frame = int(round(note.start * sec_to_frame))
             end_frame = int(round(note.end * sec_to_frame))
 
             if start_frame >= total_frames:
                 continue
             
-            end_frame = min(max(end_frame, start_frame + 1), total_frames)
+            f_start = max(0, start_frame)
+            f_end = min(max(end_frame, f_start + 1), total_frames)
 
+            if 0 <= start_frame < total_frames:
+                onset_label[start_frame, pitch] = 1.0
+                velocity_label[start_frame, pitch] = note.velocity / 127.0
 
-            onset_label[start_frame, pitch] = 1.0
-            velocity_label[start_frame, pitch] = note.velocity / 127.0
-            frame_label[start_frame:end_frame, pitch] = 1.0
-            
-            if end_frame < total_frames:
+            frame_label[f_start:f_end, pitch] = 1.0
+ 
+            if 0 <= end_frame < total_frames:
                 offset_label[end_frame, pitch] = 1.0
                 
     return {
