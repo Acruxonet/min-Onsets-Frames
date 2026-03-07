@@ -1,10 +1,10 @@
-from constant import *
-from modules import *
+from .constant import *
+from .modules import *
 
 class FrameFusion(nn.Module):
     def __init__(self, output_features=88, model_size=768):
         super().__init__()
-        self.lstm = BiLSTM(output_features * 3, model_size)
+        self.lstm = BiLSTM(output_features * 3, model_size // 2)
         self.linear = nn.Linear(model_size, output_features)
 
     def forward(self, onset_logits, offset_logits, frame_logits):
@@ -18,6 +18,7 @@ class FrameFusion(nn.Module):
     
 class OnsetsAndFrames(nn.Module):
     def __init__(self, input_features=229, output_features=88, model_size=768):
+        super().__init__()
         def build_pipeline(is_bilstm=True):
             layers = [
                 AcousticExtractor(input_features, out_features=model_size)

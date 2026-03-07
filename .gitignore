@@ -14,3 +14,4 @@ ref/
 .venv
 data/
 plan/
+inference.py

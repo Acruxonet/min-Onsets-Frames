@@ -1,4 +1,4 @@
-from constant import *
+from .constant import *
 
 class ConvBlock(nn.Module):
     def __init__(self, in_channels, out_channels, pool=False):

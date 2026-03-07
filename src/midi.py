@@ -1,4 +1,4 @@
-from constant import *
+from .constant import *
 
 def load_midi(midi_path, total_frames, offset_time=0, sr=16000, hop_length=512):
     midi_data = pretty_midi.PrettyMIDI(midi_path)

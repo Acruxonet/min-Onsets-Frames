@@ -1,4 +1,4 @@
-from constant import *
+from .constant import *
 mel_transform = T.MelSpectrogram(
     sample_rate=SR,
     n_fft=2048,
@@ -18,6 +18,8 @@ def load_audio(audio_path):
 amplitude_to_db = T.AmplitudeToDB(top_db=80)
 
 def wav_to_mel(waveform):
+    if waveform.ndim == 1:
+        waveform = waveform.unsqueeze(0)
     if waveform.shape[0] > 1:
         waveform = waveform.mean(dim=0, keepdim=True)
 
