@@ -5,6 +5,11 @@ build/
 dist/
 wheels/
 *.egg-info
+*.pth
+*.ckpt
+*.wav
+*.midi
+
 ref/
 # Virtual environments
 .venv
